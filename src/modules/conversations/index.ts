@@ -1,13 +1,14 @@
-import { PersonFaker, StringFaker } from "@/utils/faker";
-import { Observable, of } from "@/utils/rx";
+import { PersonFaker, StringFaker, ImageFaker } from "@/utils/faker"
+import { Observable, of } from "@/utils/rx"
 
 interface Convo {
-  id: string;
-  name: string;
+  id: string
+  name: string
+  avatar: string
 }
 
 interface ConvoService {
-  getConvos(): Observable<Convo[]>;
+  getConvos(): Observable<Convo[]>
 }
 
 class FakerConvosService implements ConvoService {
@@ -16,16 +17,17 @@ class FakerConvosService implements ConvoService {
       Array.from({ length: 5 }).map(() => ({
         id: StringFaker.uuid(),
         name: PersonFaker.fullName(),
+        avatar: ImageFaker.avatar(),
       }))
-    );
+    )
   }
 }
 
 const ConvosFactory = {
   get(): ConvoService {
-    return new FakerConvosService();
+    return new FakerConvosService()
   },
-};
+}
 
-export { ConvosFactory };
-export type { Convo };
+export { ConvosFactory, FakerConvosService }
+export type { Convo, ConvoService }

@@ -12,7 +12,8 @@
     "next": "14.2.1",
     "react": "^18",
     "react-dom": "^18",
-    "rxjs": "^7.8.1"
+    "rxjs": "^7.8.1",
+    "singleton-injection": "^1.0.2"
   },
   "devDependencies": {
     "@faker-js/faker": "^8.4.1",

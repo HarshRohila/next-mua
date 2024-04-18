@@ -1,3 +1,14 @@
 .card {
   padding: 10px;
+  display: flex;
+  align-items: center;
+
+  img {
+    border-radius: 50%;
+  }
+  :global {
+    .name {
+      margin-left: 10px;
+    }
+  }
 }
