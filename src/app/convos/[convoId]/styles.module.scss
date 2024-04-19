@@ -1,0 +1,52 @@
+$msg-gap: 5px;
+
+.messageForm {
+  width: 100%;
+  padding: 8px;
+  :global {
+    input {
+      width: 100%;
+      font-size: 1.2rem;
+      padding: 10px;
+      border-radius: 20px;
+      border: 0;
+      color: black;
+      background-color: white;
+    }
+  }
+}
+
+.convoPage {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.messageWindow {
+  flex: 1;
+  display: grid;
+  overflow-y: auto;
+
+  list-style-type: none;
+
+  :global {
+    li {
+      background-color: var(--secondary-color);
+      border-radius: 20px;
+      margin: $msg-gap 0;
+      padding: 10px;
+      max-width: 75%;
+      $msg-outer-gap: calc($msg-gap + 3px);
+      &:not(.my) {
+        margin-right: $msg-outer-gap;
+        justify-self: right;
+        color: black;
+        background-color: white;
+      }
+      &.my {
+        margin-left: $msg-outer-gap;
+      }
+    }
+  }
+}

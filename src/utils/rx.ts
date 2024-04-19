@@ -1,1 +1,1 @@
-export { Observable, of, lastValueFrom } from "rxjs"
+export { Observable, of, lastValueFrom, forkJoin, map } from "rxjs"

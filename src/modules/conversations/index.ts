@@ -1,4 +1,5 @@
-import { PersonFaker, StringFaker, ImageFaker } from "@/utils/faker"
+import { MOCK_USER_ID } from "@/utils/constants"
+import { PersonFaker, StringFaker, ImageFaker, TextFaker } from "@/utils/faker"
 import { Observable, of } from "@/utils/rx"
 
 interface Convo {
@@ -9,6 +10,13 @@ interface Convo {
 
 interface ConvoService {
   getConvos(): Observable<Convo[]>
+  getMessages(convoId: string): Observable<ConvoMessage[]>
+}
+
+interface ConvoMessage {
+  id: string
+  message: string
+  fromUserId: string
 }
 
 class FakerConvosService implements ConvoService {
@@ -21,13 +29,18 @@ class FakerConvosService implements ConvoService {
       }))
     )
   }
+  getMessages(convoId: string): Observable<ConvoMessage[]> {
+    return of(
+      Array.from({ length: 50 }).map(function () {
+        return {
+          id: StringFaker.uuid(),
+          message: TextFaker.sentences({ min: 1, max: 2 }),
+          fromUserId: Math.random() < 0.5 ? StringFaker.uuid() : MOCK_USER_ID,
+        }
+      })
+    )
+  }
 }
 
-const ConvosFactory = {
-  get(): ConvoService {
-    return new FakerConvosService()
-  },
-}
-
-export { ConvosFactory, FakerConvosService }
+export { FakerConvosService }
 export type { Convo, ConvoService }
