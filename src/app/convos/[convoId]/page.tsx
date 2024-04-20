@@ -3,6 +3,7 @@ import styles from "./styles.module.scss"
 import { forkJoin, lastValueFrom, map } from "@/utils/rx"
 import { Icon } from "@/ui/libs/font-awesome"
 import { sendIcon } from "@/utils/font-awesome"
+import { Message } from "@/ui/convo/message"
 
 interface PageProps {
   params: { convoId: string }
@@ -27,13 +28,13 @@ export default async function Page({ params: { convoId } }: PageProps) {
         {messages.map(function (msg) {
           return (
             <li className={msg.fromUserId === user.id ? "my" : ""} key={msg.id}>
-              {msg.message}
+              <Message message={msg} />
             </li>
           )
         })}
       </ul>
       <form className={styles.messageForm}>
-        <div contentEditable className="input" />
+        <div contentEditable className="input" data-placeholder="Type message" />
         <button type="submit">
           <Icon icon={sendIcon} />
         </button>

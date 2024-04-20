@@ -1,5 +1,5 @@
 import { MOCK_USER_ID } from "@/utils/constants"
-import { PersonFaker, StringFaker, ImageFaker, TextFaker } from "@/utils/faker"
+import { PersonFaker, StringFaker, ImageFaker, TextFaker, DateFaker } from "@/utils/faker"
 import { Observable, of } from "@/utils/rx"
 
 interface Convo {
@@ -17,6 +17,7 @@ interface ConvoMessage {
   id: string
   message: string
   fromUserId: string
+  timestamp: Date
 }
 
 class FakerConvosService implements ConvoService {
@@ -30,17 +31,22 @@ class FakerConvosService implements ConvoService {
     )
   }
   getMessages(convoId: string): Observable<ConvoMessage[]> {
-    return of(
-      Array.from({ length: 50 }).map(function () {
-        return {
-          id: StringFaker.uuid(),
-          message: TextFaker.sentences({ min: 1, max: 2 }),
-          fromUserId: Math.random() < 0.5 ? StringFaker.uuid() : MOCK_USER_ID,
-        }
-      })
-    )
+    const messages = Array.from({ length: 50 }).map(function () {
+      return {
+        id: StringFaker.uuid(),
+        message: TextFaker.sentences({ min: 1, max: 2 }),
+        fromUserId: Math.random() < 0.5 ? StringFaker.uuid() : MOCK_USER_ID,
+        timestamp: DateFaker.recent({ days: 10 }),
+      }
+    })
+
+    messages.sort(function (a, b) {
+      return b.timestamp.getTime() - a.timestamp.getTime()
+    })
+
+    return of(messages)
   }
 }
 
 export { FakerConvosService }
-export type { Convo, ConvoService }
+export type { Convo, ConvoService, ConvoMessage }

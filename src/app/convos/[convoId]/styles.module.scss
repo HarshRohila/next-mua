@@ -18,6 +18,10 @@ $msg-gap: 5px;
       max-height: 112px;
       overflow: auto;
     }
+    .input[data-placeholder]:empty:before {
+      content: attr(data-placeholder);
+      color: #555;
+    }
 
     button[type="submit"] {
       $dim: 36px;
@@ -60,16 +64,16 @@ $msg-gap: 5px;
       background-color: var(--secondary-color);
       border-radius: 20px;
       margin: $msg-gap 0;
-      padding: 10px;
+      padding: 5px 10px;
       max-width: 75%;
       $msg-outer-gap: calc($msg-gap + 3px);
-      &:not(.my) {
+      &.my {
         position: relative;
         left: calc(25% - $msg-outer-gap);
         color: black;
         background-color: white;
       }
-      &.my {
+      &:not(.my) {
         margin-left: $msg-outer-gap;
       }
     }

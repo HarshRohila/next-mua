@@ -1,3 +1,3 @@
-import { faPaperPlane } from "@fortawesome/free-solid-svg-icons"
+import { faCheckDouble, faPaperPlane } from "@fortawesome/free-solid-svg-icons"
 
-export { faPaperPlane as sendIcon }
+export { faPaperPlane as sendIcon, faCheckDouble as doubleTickIcon }
