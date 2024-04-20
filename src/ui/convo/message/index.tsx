@@ -1,7 +1,7 @@
-import { ConvoMessage } from "@/modules/conversations"
+import { ConvoMessage, MessageStatus } from "@/modules/conversations"
 import styles from "./styles.module.scss"
 import { Icon } from "@/ui/libs/font-awesome"
-import { doubleTickIcon } from "@/utils/font-awesome"
+import { clockIcon, doubleTickIcon } from "@/utils/font-awesome"
 
 interface MessageProp {
   message: ConvoMessage
@@ -14,7 +14,7 @@ export function Message({ message }: MessageProp) {
       <span className="meta">
         <span className="time">{message.timestamp.toLocaleString()}</span>
         <span className="status">
-          <Icon icon={doubleTickIcon} />
+          <Icon icon={message.status === MessageStatus.Sent ? doubleTickIcon : clockIcon} />
         </span>
       </span>
     </div>

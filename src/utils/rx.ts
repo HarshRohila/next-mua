@@ -1,1 +1,1 @@
-export { Observable, of, lastValueFrom, forkJoin, map, switchMap, tap } from "rxjs"
+export { Observable, of, lastValueFrom, forkJoin, map, switchMap, tap, timer, concat, startWith, defer } from "rxjs"

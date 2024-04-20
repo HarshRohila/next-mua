@@ -1,8 +1,8 @@
 import { ConvoMessage } from "@/modules/conversations"
-import { container } from "@/modules/singleton"
 import { UserModel } from "@/modules/user"
-import { Observable, forkJoin, map, switchMap, tap } from "@/utils/rx"
+import { Observable, defer, forkJoin, map, switchMap, tap } from "@/utils/rx"
 import { createState } from "@rx-state-utils/react"
+import { getMessages, getUser } from "./server-actions"
 
 interface State {
   messages: ConvoMessage[]
@@ -16,8 +16,8 @@ const state = createState<State>({
 
 const Features = {
   loadData(didRender$: Observable<void>, convoId: string) {
-    const messages$ = container.get("convoService").getMessages(convoId)
-    const user$ = container.get("userService").getUser()
+    const messages$ = defer(() => getMessages(convoId))
+    const user$ = defer(() => getUser())
 
     return didRender$.pipe(
       switchMap(() => forkJoin([messages$, user$])),
@@ -32,9 +32,20 @@ const Features = {
   },
   sendMessage(message$: Observable<ConvoMessage>) {
     return message$.pipe(
-      tap((msg) => {
+      tap((newMsg) => {
         state.update((currState) => {
-          return { messages: [msg, ...currState.messages] }
+          const idx = currState.messages.findIndex(function matchId(msg) {
+            return msg.id === newMsg.id
+          })
+
+          let newMessages: ConvoMessage[]
+          if (idx === -1) {
+            newMessages = [newMsg, ...currState.messages]
+          } else {
+            newMessages = currState.messages.toSpliced(idx, 1, newMsg)
+          }
+
+          return { messages: newMessages }
         })
       })
     )
