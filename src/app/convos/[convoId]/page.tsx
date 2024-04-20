@@ -1,6 +1,8 @@
 import { container } from "@/modules/singleton"
 import styles from "./styles.module.scss"
 import { forkJoin, lastValueFrom, map } from "@/utils/rx"
+import { Icon } from "@/ui/libs/font-awesome"
+import { sendIcon } from "@/utils/font-awesome"
 
 interface PageProps {
   params: { convoId: string }
@@ -31,7 +33,10 @@ export default async function Page({ params: { convoId } }: PageProps) {
         })}
       </ul>
       <form className={styles.messageForm}>
-        <input type="text" name="new-message" placeholder="Type Message" />
+        <div contentEditable className="input" />
+        <button type="submit">
+          <Icon icon={sendIcon} />
+        </button>
       </form>
     </div>
   )

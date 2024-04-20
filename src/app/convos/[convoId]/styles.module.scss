@@ -3,8 +3,10 @@ $msg-gap: 5px;
 .messageForm {
   width: 100%;
   padding: 8px;
+  position: relative;
+
   :global {
-    input {
+    .input {
       width: 100%;
       font-size: 1.2rem;
       padding: 10px;
@@ -12,6 +14,28 @@ $msg-gap: 5px;
       border: 0;
       color: black;
       background-color: white;
+      padding-right: 45px;
+      max-height: 112px;
+      overflow: auto;
+    }
+
+    button[type="submit"] {
+      $dim: 36px;
+      width: $dim;
+      height: $dim;
+      border-radius: 50%;
+      position: absolute;
+      right: 12px;
+      border: 0;
+
+      display: grid;
+      place-items: center;
+
+      bottom: 11px;
+
+      svg {
+        height: 20px;
+      }
     }
   }
 }
