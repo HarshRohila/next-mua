@@ -1,44 +1,47 @@
-import { container } from "@/modules/singleton"
+"use client"
+
 import styles from "./styles.module.scss"
-import { forkJoin, lastValueFrom, map } from "@/utils/rx"
-import { Icon } from "@/ui/libs/font-awesome"
-import { sendIcon } from "@/utils/font-awesome"
 import { Message } from "@/ui/convo/message"
+import { MessageForm } from "@/ui/convo/message/form/message-form"
+import { useEffect, useState } from "react"
+import { ConvoMessage } from "@/modules/conversations"
+import { UserModel } from "@/modules/user"
+import { useJustSubscribe, useSubscribe, useVoidEvent } from "@rx-state-utils/react"
+import { Features, state } from "./facade"
 
 interface PageProps {
   params: { convoId: string }
 }
 
-export default async function Page({ params: { convoId } }: PageProps) {
-  const messages$ = container.get("convoService").getMessages(convoId)
-  const user$ = container.get("userService").getUser()
+export default function Page({ params: { convoId } }: PageProps) {
+  const [messages, setMessages] = useState<ConvoMessage[]>([])
+  const [user, setUser] = useState<UserModel>()
 
-  const data$ = forkJoin([messages$, user$]).pipe(
-    map(([messages, user]) => ({
-      messages,
-      user,
-    }))
-  )
+  const [didRender$, didRender] = useVoidEvent<void>()
 
-  const { messages, user } = await lastValueFrom(data$)
+  useJustSubscribe(Features.loadData(didRender$, convoId))
+
+  useSubscribe(state.asObservable(), (data) => {
+    setMessages(data.messages)
+    setUser(data.user)
+  })
+
+  useEffect(() => {
+    didRender()
+  }, [])
 
   return (
     <div className={styles.convoPage}>
       <ul className={styles.messageWindow}>
         {messages.map(function (msg) {
           return (
-            <li className={msg.fromUserId === user.id ? "my" : ""} key={msg.id}>
+            <li className={msg.fromUserId === user!.id ? "my" : ""} key={msg.id}>
               <Message message={msg} />
             </li>
           )
         })}
       </ul>
-      <form className={styles.messageForm}>
-        <div contentEditable className="input" data-placeholder="Type message" />
-        <button type="submit">
-          <Icon icon={sendIcon} />
-        </button>
-      </form>
+      <MessageForm />
     </div>
   )
 }
