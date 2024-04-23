@@ -16,6 +16,16 @@ const nextConfig = {
       },
     ],
   },
+  async redirects() {
+    return [
+      // Basic redirect
+      {
+        source: "/",
+        destination: "/convos",
+        permanent: true,
+      },
+    ]
+  },
 }
 
 export default nextConfig
